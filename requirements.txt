@@ -1,0 +1,10 @@
+numpy
+opencv-python
+dlib
+imutils
+keras
+h5py
+tensorflow
+tensorboard
+sklearn
+numpy
