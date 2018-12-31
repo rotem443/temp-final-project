@@ -6,7 +6,7 @@ from configuration.config import current_config
 
 class Preprocessors:
 
-    def dataset_splited(self, shape_x, shape_y):
+    def get_dataset_splited(self, shape_x, shape_y):
 
         with open(current_config.TRAIN_IMAGES, "rb") as f:
             train_images = np.array(pickle.load(f))

@@ -41,30 +41,25 @@ def keras_predict(model, image):
 	return max(pred_probab), pred_class
 
 def recognize():
-	disp_probab, disp_class = 0, 0
-	while True:
-		img = cam.read()[1]
-		gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-		faces = detector(gray)
-		if len(faces) > 0:
-			face = faces[0]
-			shape_68 = shape_predictor_68(img, face)
-			shape = face_utils.shape_to_np(shape_68)
-			mask = create_mask(shape, img)
-			masked = cv2.bitwise_and(gray, mask)
-			(x, y, w, h) = face_utils.rect_to_bb(face)
-			cv2.rectangle(img, (x, y), (x+w, y+h), (255, 255, 0), 2)
-			faceAligned = fa.align(masked, gray, face)
-			cv2.imshow('faceAligned', faceAligned)
-			pred_probab, pred_class = keras_predict(cnn_model, faceAligned)
-			if pred_probab > 0.5:
-				disp_probab = pred_probab
-				disp_class = pred_class
-			cv2.putText(img, str(disp_probab), (50, 50), cv2.FONT_HERSHEY_TRIPLEX, 1.5, (0, 0, 0))
-			cv2.putText(img, str(disp_class), (50, 100), cv2.FONT_HERSHEY_TRIPLEX, 1.5, (0, 0, 0))
-		cv2.imshow('img', img)
-		if cv2.waitKey(1) == ord('q'):
-			break
+	display_probabaility, display_class = 0, 0
+
+	img = cam.read()[1]
+	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	faces = detector(gray)
+	if len(faces) > 0:
+		face = faces[0]
+		shape_68 = shape_predictor_68(img, face)
+		shape = face_utils.shape_to_np(shape_68)
+		mask = create_mask(shape, img)
+		masked = cv2.bitwise_and(gray, mask)
+		(x, y, w, h) = face_utils.rect_to_bb(face)
+		cv2.rectangle(img, (x, y), (x+w, y+h), (255, 255, 0), 2)
+		faceAligned = fa.align(masked, gray, face)
+		cv2.imshow('faceAligned', faceAligned)
+		pred_probab, pred_class = keras_predict(cnn_model, faceAligned)
+		if pred_probab > 0.5:
+			disp_probab = pred_probab
+			disp_class = pred_class
 
 
 keras_predict(cnn_model, np.zeros((150, 150, 1), dtype=np.uint8))
